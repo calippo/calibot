@@ -8,6 +8,8 @@ import {
   getDoc,
   addDoc,
   removeDoc,
+  getAccessCode,
+  regenerateAccessCode,
 } from './store.js'
 import { indexDoc, chat, hasKey } from './rag.js'
 import { seedDocs } from './seed.js'
@@ -17,6 +19,16 @@ app.use(cors())
 app.use(express.json({ limit: '5mb' }))
 
 const PORT = process.env.PORT || 3001
+// Password area gestore (deve combaciare con quella del frontend).
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'reportaid123!'
+
+// Protegge gli endpoint riservati al gestore.
+function requireAdmin(req, res, next) {
+  if (req.get('x-admin-password') !== ADMIN_PASSWORD) {
+    return res.status(401).json({ error: 'Non autorizzato' })
+  }
+  next()
+}
 
 // --- Config ---
 app.get('/api/config', (_req, res) => {
@@ -57,8 +69,26 @@ app.delete('/api/docs/:id', (req, res) => {
   res.json({ ok: true })
 })
 
+// --- Codice di accesso ospiti ---
+app.post('/api/access-check', (req, res) => {
+  const code = (req.body?.code || '').trim().toUpperCase()
+  res.json({ ok: !!code && code === getAccessCode() })
+})
+
+app.get('/api/admin/access-code', requireAdmin, (_req, res) => {
+  res.json({ code: getAccessCode() })
+})
+
+app.post('/api/admin/access-code', requireAdmin, (_req, res) => {
+  res.json({ code: regenerateAccessCode() })
+})
+
 // --- Chat ---
 app.post('/api/chat', async (req, res) => {
+  const code = (req.get('x-access-code') || '').trim().toUpperCase()
+  if (code !== getAccessCode()) {
+    return res.status(401).json({ error: 'Codice di accesso non valido' })
+  }
   const { messages } = req.body || {}
   if (!Array.isArray(messages) || !messages.length) {
     return res.status(400).json({ error: 'messages mancanti' })
@@ -80,7 +110,8 @@ async function bootstrap() {
   }
   app.listen(PORT, () => {
     console.log(`\n  Agriturismo Zàgara — API su http://localhost:${PORT}`)
-    console.log(`  OpenAI: ${hasKey ? 'attivo (RAG + chat LLM)' : 'NESSUNA KEY → fallback ricerca keyword'}\n`)
+    console.log(`  OpenAI: ${hasKey ? 'attivo (RAG + chat LLM)' : 'NESSUNA KEY → fallback ricerca keyword'}`)
+    console.log(`  Codice di accesso ospiti: ${getAccessCode()} (rigenerabile dall'area gestore)\n`)
   })
 }
 

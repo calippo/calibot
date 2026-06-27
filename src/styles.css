@@ -276,6 +276,87 @@ a {
   background: var(--arancia);
 }
 
+/* ----- Gate codice di accesso (lato chat) ----- */
+.chat-gate {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 32px 28px;
+}
+
+.chat-gate-card {
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.chat-gate-card h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin: 0 0 8px;
+}
+
+.chat-gate-card p {
+  margin: 0 0 20px;
+  font-size: 0.9rem;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.chat-gate-card input {
+  width: 100%;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: 0.22em;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(250, 243, 230, 0.96);
+  color: var(--lava);
+  margin-bottom: 14px;
+}
+
+.chat-gate-card input:focus {
+  outline: 2px solid var(--ginestra);
+}
+
+.chat-gate-card .btn {
+  width: 100%;
+  padding: 13px;
+}
+
+.gate-error {
+  background: rgba(216, 82, 31, 0.22);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.84rem;
+  margin-bottom: 14px;
+}
+
+/* ----- Codice di accesso (lato admin) ----- */
+.code-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.access-code {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 2rem;
+  letter-spacing: 0.28em;
+  color: var(--maiolica-deep);
+  background: var(--paper);
+  border: 2px dashed var(--maiolica);
+  border-radius: 12px;
+  padding: 12px 22px;
+}
+
 .messages {
   flex: 1;
   overflow-y: auto;

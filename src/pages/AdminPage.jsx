@@ -14,6 +14,8 @@ export default function AdminPage() {
   const [docs, setDocs] = useState([])
   const [savedAt, setSavedAt] = useState(false)
   const [error, setError] = useState('')
+  const [accessCode, setAccessCode] = useState('')
+  const [regenerating, setRegenerating] = useState(false)
 
   // form nuovo documento
   const [title, setTitle] = useState('')
@@ -27,7 +29,29 @@ export default function AdminPage() {
       setHasKey(d.hasKey)
     })
     refreshDocs()
+    api
+      .getAccessCode(ADMIN_PASSWORD)
+      .then((d) => setAccessCode(d.code))
+      .catch(() => {})
   }, [])
+
+  async function regenerate() {
+    if (
+      !window.confirm(
+        'Rigenerare il codice? Il codice attuale smetterà subito di funzionare e gli ospiti dovranno usare quello nuovo.',
+      )
+    )
+      return
+    setRegenerating(true)
+    try {
+      const d = await api.regenerateAccessCode(ADMIN_PASSWORD)
+      setAccessCode(d.code)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setRegenerating(false)
+    }
+  }
 
   function refreshDocs() {
     api.listDocs().then((d) => setDocs(d.docs))
@@ -203,6 +227,21 @@ export default function AdminPage() {
             {savedAt && <span className="saved-note">✓ Salvato</span>}
           </div>
         </form>
+
+        {/* --- Codice di accesso --- */}
+        <div className="panel">
+          <h2>Codice di accesso ospiti</h2>
+          <p className="hint">
+            Gli ospiti devono inserire questo codice per usare la chat. Condividilo al
+            check-in o lascialo in camera. Rigeneralo quando vuoi revocare l’accesso.
+          </p>
+          <div className="code-row">
+            <code className="access-code">{accessCode || '······'}</code>
+            <button className="btn ghost small" onClick={regenerate} disabled={regenerating}>
+              {regenerating ? 'Rigenero…' : 'Rigenera codice'}
+            </button>
+          </div>
+        </div>
 
         {/* --- Documenti --- */}
         <div className="panel">

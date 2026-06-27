@@ -1,6 +1,16 @@
 // In-memory store. Nessun database: tutto vive in RAM finché il server è acceso.
+import { randomBytes } from 'crypto'
 
 let nextDocId = 1
+
+// Codice di accesso ospiti: senza ambiguità (niente I/O/0/1), facile da dettare.
+function genCode() {
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  const bytes = randomBytes(6)
+  let code = ''
+  for (let i = 0; i < 6; i++) code += alphabet[bytes[i] % alphabet.length]
+  return code
+}
 
 const state = {
   config: {
@@ -17,6 +27,8 @@ const state = {
   docs: [],
   // chunks: pezzi di documento indicizzati per la ricerca (embedding opzionale)
   chunks: [],
+  // codice che gli ospiti devono inserire per usare la chat
+  accessCode: genCode(),
 }
 
 export function getConfig() {
@@ -57,6 +69,16 @@ export function removeDoc(id) {
   state.docs = state.docs.filter((d) => d.id !== id)
   state.chunks = state.chunks.filter((c) => c.docId !== id)
   return state.docs.length < before
+}
+
+// --- codice di accesso ---
+export function getAccessCode() {
+  return state.accessCode
+}
+
+export function regenerateAccessCode() {
+  state.accessCode = genCode()
+  return state.accessCode
 }
 
 // --- chunks ---

@@ -32,11 +32,23 @@ Apri http://localhost:5173 — l'area gestore è su http://localhost:5173/admin.
 
 > Se la porta 5173 è occupata, Vite ne sceglie un'altra (es. 5174): guarda l'output.
 
+> ⚠️ La key viene letta **solo all'avvio**. Se modifichi `.env`, ferma e riavvia
+> `npm run dev` (anche con `--watch`, le modifiche a `.env` non fanno ripartire il
+> processo da sole).
+
 ### Senza API key
 
 L'app funziona comunque: la chat passa automaticamente a una **ricerca per parole
 chiave** sui documenti e mostra i passaggi più rilevanti. Con una key valida ottieni
 risposte conversazionali e retrieval semantico (embedding).
+
+## Controllo accessi
+
+- **Area gestore** (`/admin`): protetta da password. Default `reportaid123!`
+  (sovrascrivibile con la variabile `ADMIN_PASSWORD`).
+- **Chat ospiti**: protetta da un **codice di accesso** a 6 caratteri, generato
+  all'avvio e stampato nel log del server. Il gestore lo vede e lo rigenera dall'area
+  gestore; rigenerandolo, il codice precedente smette subito di funzionare.
 
 ## API
 

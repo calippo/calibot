@@ -1,6 +1,9 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import {
   getConfig,
   updateConfig,
@@ -101,6 +104,18 @@ app.post('/api/chat', async (req, res) => {
     res.status(500).json({ error: 'Errore nel generare la risposta', detail: err.message })
   }
 })
+
+// In produzione Express serve anche il frontend buildato (un solo servizio).
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const distPath = path.join(__dirname, '..', 'dist')
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath))
+  // Fallback SPA: ogni rotta non-API restituisce index.html (per /admin ecc.)
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next()
+    res.sendFile(path.join(distPath, 'index.html'))
+  })
+}
 
 // Indicizza i documenti di esempio all'avvio.
 async function bootstrap() {

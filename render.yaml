@@ -1,0 +1,17 @@
+# Render Blueprint — deploy in un click da questo repo.
+# Su Render: New > Blueprint > seleziona il repo. Poi imposta i secret.
+services:
+  - type: web
+    name: calibot
+    runtime: node
+    plan: free # il free tier va in sleep dopo inattività: lo stato in-memory si azzera
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false # da inserire nella dashboard (secret, non versionato)
+      - key: ADMIN_PASSWORD
+        sync: false # opzionale: password area gestore (default reportaid123!)
+      - key: NODE_VERSION
+        value: "20"

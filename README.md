@@ -61,6 +61,26 @@ risposte conversazionali e retrieval semantico (embedding).
 | DELETE | `/api/docs/:id`    | Elimina un documento                         |
 | POST   | `/api/chat`        | Chat: `{ messages: [...] }` → `{ reply, sources }` |
 
+## Deploy (Render)
+
+In produzione Express serve anche il frontend buildato, quindi è **un solo servizio**.
+
+1. Push del repo su GitHub (già fatto).
+2. Su [Render](https://render.com): **New > Blueprint**, seleziona questo repo
+   (legge `render.yaml`). In alternativa **New > Web Service** con:
+   - Build command: `npm install && npm run build`
+   - Start command: `npm start`
+3. Imposta le variabili d'ambiente (Environment):
+   - `OPENAI_API_KEY` — la tua chiave (secret).
+   - `ADMIN_PASSWORD` — opzionale, password area gestore.
+4. Deploy. L'app risponde sull'URL di Render; il codice di accesso ospiti è nei log.
+
+> Il **free tier va in sleep** dopo inattività: al risveglio lo stato in-memory si
+> azzera (restano solo i documenti seed). Per dati persistenti serve il piano a pagamento
+> + un volume e un piccolo storage su file (facile da aggiungere).
+
+Per girare la build di produzione in locale: `npm run build && npm start`.
+
 ## Note
 
 - La foto di sfondo (`public/etna.jpg`) è l'Etna su Catania, "Etna Volcano Sicily Italy"

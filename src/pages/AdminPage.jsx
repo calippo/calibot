@@ -113,6 +113,23 @@ export default function AdminPage() {
     refreshDocs()
   }
 
+  async function download(doc) {
+    try {
+      const { doc: full } = await api.getDoc(doc.id)
+      const blob = new Blob([full.content], { type: 'text/markdown;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${(full.title || 'documento').trim().replace(/[\\/:*?"<>|]+/g, '-')}.md`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
   function login(e) {
     e.preventDefault()
     if (pw === ADMIN_PASSWORD) {
@@ -261,9 +278,14 @@ export default function AdminPage() {
                     <strong>{d.title}</strong>
                     <span>{d.chars.toLocaleString('it-IT')} caratteri</span>
                   </div>
-                  <button className="btn danger small" onClick={() => remove(d.id)}>
-                    Elimina
-                  </button>
+                  <div className="doc-actions">
+                    <button className="btn ghost small" onClick={() => download(d)}>
+                      Scarica
+                    </button>
+                    <button className="btn danger small" onClick={() => remove(d.id)}>
+                      Elimina
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

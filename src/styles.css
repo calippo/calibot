@@ -713,6 +713,12 @@ a {
   color: var(--lava-soft);
 }
 
+.doc-actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+
 .empty {
   padding: 28px;
   text-align: center;

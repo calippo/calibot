@@ -1,0 +1,57 @@
+# Agriturismo Zàgara — Chatbot per struttura ricettiva
+
+Assistente virtuale per gli ospiti di una struttura ricettiva (demo: un agriturismo
+sulle pendici dell'Etna, a Catania). Risponde su servizi, orari e cosa vedere in zona
+attingendo a documenti markdown caricati dal gestore — una specie di RAG, tutto in memoria.
+
+- **Pagina ospiti** (`/`): info sulla struttura + chat assistente.
+- **Area gestore** (`/admin`): configura nome/identità della struttura e gestisci i
+  documenti (la "base di conoscenza") da cui la chat attinge.
+
+Nessun database: configurazione e documenti vivono in RAM finché il server è acceso.
+
+## Architettura
+
+- **Frontend**: React + Vite (`src/`).
+- **Backend**: Express in-memory (`server/`).
+  - `store.js` — stato in memoria (config + documenti + chunk).
+  - `rag.js` — chunking, embedding OpenAI e retrieval (con fallback a ricerca per
+    parole chiave se manca la API key).
+  - `index.js` — API REST.
+- **LLM**: OpenAI (`gpt-4o-mini` per la chat, `text-embedding-3-small` per il RAG).
+
+## Avvio
+
+```bash
+npm install
+cp .env.example .env          # poi inserisci la tua OPENAI_API_KEY
+npm run dev                    # avvia frontend (5173) + backend (3001)
+```
+
+Apri http://localhost:5173 — l'area gestore è su http://localhost:5173/admin.
+
+> Se la porta 5173 è occupata, Vite ne sceglie un'altra (es. 5174): guarda l'output.
+
+### Senza API key
+
+L'app funziona comunque: la chat passa automaticamente a una **ricerca per parole
+chiave** sui documenti e mostra i passaggi più rilevanti. Con una key valida ottieni
+risposte conversazionali e retrieval semantico (embedding).
+
+## API
+
+| Metodo | Endpoint           | Descrizione                                  |
+| ------ | ------------------ | -------------------------------------------- |
+| GET    | `/api/config`      | Configurazione struttura + stato API key     |
+| PUT    | `/api/config`      | Aggiorna la configurazione                   |
+| GET    | `/api/docs`        | Elenco documenti                             |
+| POST   | `/api/docs`        | Aggiunge e indicizza un documento markdown   |
+| DELETE | `/api/docs/:id`    | Elimina un documento                         |
+| POST   | `/api/chat`        | Chat: `{ messages: [...] }` → `{ reply, sources }` |
+
+## Note
+
+- La foto di sfondo (`public/etna.jpg`) è l'Etna su Catania, "Etna Volcano Sicily Italy"
+  di gnuckx, Creative Commons (Wikimedia Commons).
+- Per persistere i dati basterebbe sostituire `server/store.js` con un piccolo file JSON
+  o un database, senza toccare il resto.

@@ -1,0 +1,700 @@
+:root {
+  /* Palette: pietra lavica, zàgara (fiore d'agrume), maiolica di Caltagirone */
+  --lava: #221b16;
+  --lava-soft: #4a3b30;
+  --paper: #faf3e6;
+  --paper-2: #f2e6cf;
+  --maiolica: #145c66;
+  --maiolica-deep: #0d444c;
+  --arancia: #d8521f;
+  --ginestra: #e6b33e;
+  --oliva: #6f7c45;
+  --line: rgba(34, 27, 22, 0.14);
+  --shadow: 0 18px 50px -24px rgba(13, 68, 76, 0.45);
+
+  --display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --body: 'Inter', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--body);
+  color: var(--lava);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+/* ----- Signature: fascia di maioliche ----- */
+.tile-band {
+  height: 10px;
+  background-image: radial-gradient(
+      circle at 50% 50%,
+      var(--ginestra) 0 22%,
+      transparent 23%
+    ),
+    radial-gradient(circle at 0% 50%, var(--arancia) 0 22%, transparent 23%),
+    radial-gradient(circle at 100% 50%, var(--arancia) 0 22%, transparent 23%),
+    linear-gradient(45deg, var(--maiolica-deep) 25%, transparent 0 75%, var(--maiolica-deep) 0),
+    linear-gradient(var(--maiolica), var(--maiolica));
+  background-size: 20px 20px;
+  background-position: center;
+  flex: none;
+}
+
+/* ----- Top bar ----- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: var(--lava);
+  color: var(--paper);
+}
+
+.brandmark {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brandmark .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ginestra);
+  align-self: center;
+}
+
+.topbar .nav-link {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid rgba(250, 243, 230, 0.3);
+  border-radius: 999px;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.topbar .nav-link:hover {
+  background: var(--ginestra);
+  color: var(--lava);
+  border-color: var(--ginestra);
+}
+
+/* ----- Guest layout ----- */
+.guest {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.guest-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 0;
+}
+
+/* ----- Info panel ----- */
+.info {
+  padding: 56px clamp(28px, 4vw, 64px);
+  /* Etna su Catania, velato dai toni caldi della zàgara per leggibilità */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(250, 243, 230, 0.95) 0%,
+      rgba(250, 243, 230, 0.86) 38%,
+      rgba(242, 230, 207, 0.74) 100%
+    ),
+    url('/etna.jpg') center / cover no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+.info > * {
+  position: relative;
+  z-index: 1;
+}
+
+.info::after {
+  /* alone di luce caldo che fonde foto e palette */
+  content: '';
+  position: absolute;
+  right: -140px;
+  bottom: -140px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--ginestra), transparent 62%);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.eyebrow {
+  font-family: var(--display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--arancia);
+  margin: 0 0 14px;
+}
+
+.info h1 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 5vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  margin: 0 0 14px;
+}
+
+.info .tagline {
+  font-family: var(--display);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--maiolica-deep);
+  margin: 0 0 28px;
+}
+
+.info .location {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--lava-soft);
+  margin-bottom: 24px;
+}
+
+.info .description {
+  font-size: 1.02rem;
+  line-height: 1.65;
+  max-width: 46ch;
+  color: var(--lava-soft);
+  margin: 0 0 32px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.chip {
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(20, 92, 102, 0.1);
+  color: var(--maiolica-deep);
+  border: 1px solid rgba(20, 92, 102, 0.18);
+}
+
+.contact-card {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  font-size: 0.92rem;
+  color: var(--lava-soft);
+}
+
+.contact-card strong {
+  font-family: var(--display);
+  display: block;
+  margin-bottom: 4px;
+  color: var(--lava);
+}
+
+/* ----- Chat ----- */
+.chat {
+  background: var(--maiolica);
+  color: var(--paper);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.chat-head {
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid rgba(250, 243, 230, 0.16);
+}
+
+.chat-head h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin: 0 0 4px;
+}
+
+.chat-head p {
+  margin: 0;
+  font-size: 0.86rem;
+  opacity: 0.8;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(250, 243, 230, 0.12);
+}
+
+.status-pill .led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ginestra);
+}
+
+.status-pill.off .led {
+  background: var(--arancia);
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.msg {
+  max-width: 82%;
+  padding: 13px 16px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  animation: rise 0.25s ease;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.msg.user {
+  align-self: flex-end;
+  background: var(--ginestra);
+  color: var(--lava);
+  border-bottom-right-radius: 5px;
+}
+
+.msg.assistant {
+  align-self: flex-start;
+  background: rgba(250, 243, 230, 0.97);
+  color: var(--lava);
+  border-bottom-left-radius: 5px;
+  box-shadow: var(--shadow);
+}
+
+.msg.assistant p:first-child {
+  margin-top: 0;
+}
+.msg.assistant p:last-child {
+  margin-bottom: 0;
+}
+.msg.assistant ul {
+  margin: 8px 0;
+  padding-left: 18px;
+}
+
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.source-chip {
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(20, 92, 102, 0.12);
+  color: var(--maiolica-deep);
+  border: 1px solid rgba(20, 92, 102, 0.2);
+}
+
+.typing {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--maiolica);
+  opacity: 0.5;
+  animation: blink 1.2s infinite;
+}
+.typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 28px 12px;
+}
+
+.suggestion {
+  font-family: var(--body);
+  font-size: 0.82rem;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--paper);
+  border: 1px solid rgba(250, 243, 230, 0.32);
+  cursor: pointer;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.suggestion:hover {
+  background: var(--paper);
+  color: var(--maiolica-deep);
+}
+
+.composer {
+  display: flex;
+  gap: 10px;
+  padding: 16px 28px 24px;
+  border-top: 1px solid rgba(250, 243, 230, 0.16);
+}
+
+.composer input {
+  flex: 1;
+  font-family: var(--body);
+  font-size: 0.96rem;
+  padding: 13px 16px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(250, 243, 230, 0.96);
+  color: var(--lava);
+}
+
+.composer input:focus {
+  outline: 2px solid var(--ginestra);
+}
+
+.btn {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.92rem;
+  border: none;
+  border-radius: 12px;
+  padding: 0 22px;
+  cursor: pointer;
+  background: var(--arancia);
+  color: var(--paper);
+  transition: filter 0.16s ease, transform 0.08s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.06);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ----- Admin ----- */
+.admin {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+}
+
+.admin-body {
+  flex: 1;
+  width: min(960px, 92vw);
+  margin: 0 auto;
+  padding: 48px 0 80px;
+}
+
+.admin-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin h1 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 2.2rem;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+
+.gate {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 48px 20px;
+}
+
+.gate-card {
+  width: min(420px, 92vw);
+  margin: 0;
+}
+
+.admin .lede {
+  color: var(--lava-soft);
+  margin: 0 0 36px;
+  max-width: 56ch;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 28px;
+  box-shadow: 0 12px 40px -28px rgba(34, 27, 22, 0.4);
+}
+
+.panel h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin: 0 0 4px;
+}
+
+.panel .hint {
+  color: var(--lava-soft);
+  font-size: 0.9rem;
+  margin: 0 0 22px;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.86rem;
+  margin-bottom: 7px;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  font-family: var(--body);
+  font-size: 0.95rem;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--lava);
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: 2px solid var(--maiolica);
+  background: #fff;
+}
+
+.field textarea {
+  min-height: 160px;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--maiolica-deep);
+  border: 1px solid var(--maiolica);
+}
+
+.btn.small {
+  font-size: 0.8rem;
+  padding: 8px 14px;
+}
+
+.btn.danger {
+  background: transparent;
+  color: var(--arancia);
+  border: 1px solid rgba(216, 82, 31, 0.4);
+}
+
+.saved-note {
+  color: var(--oliva);
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+
+.doc-item .meta {
+  min-width: 0;
+}
+
+.doc-item .meta strong {
+  font-family: var(--display);
+  display: block;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.doc-item .meta span {
+  font-size: 0.8rem;
+  color: var(--lava-soft);
+}
+
+.empty {
+  padding: 28px;
+  text-align: center;
+  color: var(--lava-soft);
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.upload-zone {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 16px;
+  border: 1px dashed var(--maiolica);
+  border-radius: 12px;
+  background: rgba(20, 92, 102, 0.05);
+  margin-bottom: 18px;
+}
+
+.banner {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.banner.warn {
+  background: rgba(230, 179, 62, 0.18);
+  border: 1px solid rgba(230, 179, 62, 0.5);
+  color: #7a5a10;
+}
+
+.banner.error {
+  background: rgba(216, 82, 31, 0.12);
+  border: 1px solid rgba(216, 82, 31, 0.35);
+  color: #8c3414;
+}
+
+.loading-screen {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  font-family: var(--display);
+  color: var(--maiolica-deep);
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 900px) {
+  .guest-grid {
+    grid-template-columns: 1fr;
+  }
+  .chat {
+    min-height: 70vh;
+  }
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+  }
+}

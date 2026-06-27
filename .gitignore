@@ -141,3 +141,12 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# macOS
+.DS_Store
+
+# brief / immagini di riferimento
+WhatsApp Image*.jpeg
+
+# config locale Claude Code
+.claude/

@@ -130,6 +130,45 @@ export default function AdminPage() {
     }
   }
 
+  function readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader()
+      r.onload = () => resolve(String(r.result))
+      r.onerror = reject
+      r.readAsDataURL(file)
+    })
+  }
+
+  async function pickImage(e, key, maxMB) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setError('')
+    if (!file.type.startsWith('image/')) {
+      setError('Carica un file immagine.')
+      e.target.value = ''
+      return
+    }
+    if (file.size > maxMB * 1024 * 1024) {
+      setError(`L’immagine supera ${maxMB} MB: usa un file più leggero.`)
+      e.target.value = ''
+      return
+    }
+    setConfig({ ...config, [key]: await readFileAsDataURL(file) })
+    e.target.value = ''
+  }
+
+  function setService(i, val) {
+    const s = [...(config.services || [])]
+    s[i] = val
+    setConfig({ ...config, services: s })
+  }
+  function addService() {
+    setConfig({ ...config, services: [...(config.services || []), ''] })
+  }
+  function removeService(i) {
+    setConfig({ ...config, services: (config.services || []).filter((_, j) => j !== i) })
+  }
+
   function login(e) {
     e.preventDefault()
     if (pw === ADMIN_PASSWORD) {
@@ -200,44 +239,171 @@ export default function AdminPage() {
         )}
         {error && <div className="banner error">{error}</div>}
 
-        {/* --- Configurazione --- */}
-        <form className="panel" onSubmit={saveConfig}>
-          <h2>Identità della struttura</h2>
-          <p className="hint">Questi dati appaiono nella pagina ospiti e guidano il tono dell’assistente.</p>
+        {/* --- Configurazione (un solo salvataggio per tutto) --- */}
+        <form onSubmit={saveConfig}>
+          <div className="panel">
+            <h2>Identità della struttura</h2>
+            <p className="hint">Questi dati appaiono nella pagina ospiti e guidano il tono dell’assistente.</p>
 
-          <div className="row">
-            <div className="field">
-              <label>Nome struttura</label>
-              <input {...field('name')} />
+            <div className="row">
+              <div className="field">
+                <label>Nome struttura</label>
+                <input {...field('name')} />
+              </div>
+              <div className="field">
+                <label>Slogan</label>
+                <input {...field('tagline')} />
+              </div>
             </div>
+
             <div className="field">
-              <label>Slogan</label>
-              <input {...field('tagline')} />
+              <label>Località</label>
+              <input {...field('location')} />
+            </div>
+
+            <div className="field">
+              <label>Descrizione</label>
+              <textarea style={{ minHeight: 100, fontFamily: 'var(--body)', fontSize: '0.95rem' }} {...field('description')} />
+            </div>
+
+            <div className="row">
+              <div className="field">
+                <label>Contatti</label>
+                <input {...field('contact')} />
+              </div>
+              <div className="field">
+                <label>Messaggio di benvenuto</label>
+                <input {...field('welcome')} />
+              </div>
             </div>
           </div>
 
-          <div className="field">
-            <label>Località</label>
-            <input {...field('location')} />
-          </div>
+          {/* Logo e sfondo */}
+          <div className="panel">
+            <h2>Logo e immagine di sfondo</h2>
+            <p className="hint">
+              Se non carichi un logo, viene mostrato il nome della struttura come testo.
+            </p>
 
-          <div className="field">
-            <label>Descrizione</label>
-            <textarea style={{ minHeight: 100, fontFamily: 'var(--body)', fontSize: '0.95rem' }} {...field('description')} />
-          </div>
+            <div className="row">
+              <div className="field">
+                <label>Logo</label>
+                <div className="img-control">
+                  {config.logo ? (
+                    <img className="img-preview logo" src={config.logo} alt="Logo" />
+                  ) : (
+                    <div className="img-placeholder">Nessun logo — si usa il nome testuale</div>
+                  )}
+                  <div className="img-buttons">
+                    <label className="btn ghost small" style={{ cursor: 'pointer' }}>
+                      {config.logo ? 'Cambia logo' : 'Carica logo'}
+                      <input
+                        type="file"
+                        accept="image/png,image/svg+xml,image/webp,image/jpeg"
+                        onChange={(e) => pickImage(e, 'logo', 1)}
+                        style={{ display: 'none' }}
+                      />
+                    </label>
+                    {config.logo && (
+                      <button
+                        type="button"
+                        className="btn danger small"
+                        onClick={() => setConfig({ ...config, logo: '' })}
+                      >
+                        Rimuovi
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <p className="spec">
+                  PNG o SVG con sfondo trasparente · orizzontale · ~400×120 px
+                  (max 600×200) · peso &lt; 1 MB
+                </p>
+              </div>
 
-          <div className="row">
-            <div className="field">
-              <label>Contatti</label>
-              <input {...field('contact')} />
+              <div className="field">
+                <label>Immagine di sfondo</label>
+                <div className="img-control">
+                  <img
+                    className="img-preview bg"
+                    src={config.backgroundImage || '/etna.jpg'}
+                    alt="Sfondo"
+                  />
+                  <div className="img-buttons">
+                    <label className="btn ghost small" style={{ cursor: 'pointer' }}>
+                      Cambia sfondo
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={(e) => pickImage(e, 'backgroundImage', 3)}
+                        style={{ display: 'none' }}
+                      />
+                    </label>
+                    {config.backgroundImage && (
+                      <button
+                        type="button"
+                        className="btn danger small"
+                        onClick={() => setConfig({ ...config, backgroundImage: '' })}
+                      >
+                        Ripristina default
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <p className="spec">
+                  JPG orizzontale · almeno 1600×1000 px (consigliato 1920×1280, formato
+                  3:2) · peso &lt; 3 MB
+                </p>
+              </div>
             </div>
+          </div>
+
+          {/* Servizi in evidenza */}
+          <div className="panel">
+            <h2>Servizi in evidenza</h2>
+            <p className="hint">
+              Le etichette mostrate sotto la descrizione (es. “Noleggio e-bike”).
+            </p>
+            <div className="service-list">
+              {(config.services || []).map((s, i) => (
+                <div className="service-row" key={i}>
+                  <input
+                    value={s}
+                    onChange={(e) => setService(i, e.target.value)}
+                    placeholder="Es. Noleggio e-bike"
+                  />
+                  <button
+                    type="button"
+                    className="btn danger small"
+                    onClick={() => removeService(i)}
+                  >
+                    Rimuovi
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button type="button" className="btn ghost small" onClick={addService}>
+              + Aggiungi servizio
+            </button>
+          </div>
+
+          {/* Finanziamento */}
+          <div className="panel">
+            <h2>Informazioni sul finanziamento</h2>
+            <p className="hint">
+              Testo mostrato in fondo alla pagina ospiti, in caratteri piccoli (requisito
+              tipico dei bandi). Lascia vuoto per nasconderlo.
+            </p>
             <div className="field">
-              <label>Messaggio di benvenuto</label>
-              <input {...field('welcome')} />
+              <textarea
+                style={{ minHeight: 90, fontFamily: 'var(--body)', fontSize: '0.9rem' }}
+                placeholder="Es. Progetto finanziato nell’ambito di… — CUP …"
+                {...field('funding')}
+              />
             </div>
           </div>
 
-          <div className="actions">
+          <div className="actions sticky-save">
             <button className="btn" type="submit">
               Salva modifiche
             </button>

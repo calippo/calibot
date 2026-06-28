@@ -767,6 +767,121 @@ a {
   color: var(--maiolica-deep);
 }
 
+/* ----- Logo (brand) ----- */
+.topbar-logo {
+  height: 30px;
+  width: auto;
+  display: block;
+}
+
+.hero-logo {
+  max-width: 320px;
+  max-height: 140px;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 0 16px;
+}
+
+/* ----- Footer finanziamento ----- */
+.funding {
+  padding: 18px clamp(28px, 4vw, 64px);
+  background: var(--lava);
+  color: rgba(250, 243, 230, 0.72);
+  font-size: 0.74rem;
+  line-height: 1.55;
+  text-align: center;
+  white-space: pre-wrap;
+}
+
+/* ----- Controlli immagine (admin) ----- */
+.img-control {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.img-preview {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.img-preview.logo {
+  max-height: 64px;
+  max-width: 100%;
+  padding: 8px 12px;
+  object-fit: contain;
+}
+
+.img-preview.bg {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.img-placeholder {
+  font-size: 0.85rem;
+  color: var(--lava-soft);
+  padding: 18px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  text-align: center;
+  width: 100%;
+}
+
+.img-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.spec {
+  font-size: 0.78rem;
+  color: var(--lava-soft);
+  margin: 8px 0 0;
+}
+
+/* ----- Editor servizi (admin) ----- */
+.service-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.service-row {
+  display: flex;
+  gap: 10px;
+}
+
+.service-row input {
+  flex: 1;
+  font-family: var(--body);
+  font-size: 0.95rem;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--lava);
+}
+
+.service-row input:focus {
+  outline: 2px solid var(--maiolica);
+  background: #fff;
+}
+
+.sticky-save {
+  position: sticky;
+  bottom: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 10px 30px -16px rgba(34, 27, 22, 0.5);
+  z-index: 5;
+}
+
 /* ----- Responsive ----- */
 @media (max-width: 900px) {
   .guest-grid {

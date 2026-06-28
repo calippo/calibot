@@ -22,6 +22,21 @@ const state = {
     contact: '+39 095 000 0000 · ciao@agriturismozagara.it',
     welcome:
       'Ciao! Sono l’assistente di Agriturismo Zàgara. Posso aiutarti con i servizi della struttura, gli orari, le camere e cosa vedere sull’Etna e a Catania. Cosa ti serve?',
+    // Logo (data URL). Se vuoto, in pagina si mostra il nome come testo.
+    logo: '',
+    // Immagine di sfondo del pannello info (data URL). Se vuoto, usa quella di default.
+    backgroundImage: '',
+    // Servizi in evidenza mostrati sotto la descrizione.
+    services: [
+      'Camere vista Etna',
+      'Colazione contadina',
+      'Cucina a km zero',
+      'Piscina stagionale',
+      'Noleggio e-bike',
+      'Pet friendly',
+    ],
+    // Informazioni sul finanziamento (mostrate in fondo alla pagina, in piccolo).
+    funding: '',
   },
   // docs: documenti markdown caricati dall'admin
   docs: [],

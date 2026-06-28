@@ -19,7 +19,7 @@ import { seedDocs } from './seed.js'
 
 const app = express()
 app.use(cors())
-app.use(express.json({ limit: '5mb' }))
+app.use(express.json({ limit: '12mb' })) // immagini logo/sfondo arrivano come data URL
 
 const PORT = process.env.PORT || 3001
 // Password area gestore (deve combaciare con quella del frontend).
@@ -39,7 +39,18 @@ app.get('/api/config', (_req, res) => {
 })
 
 app.put('/api/config', (req, res) => {
-  const allowed = ['name', 'tagline', 'location', 'description', 'contact', 'welcome']
+  const allowed = [
+    'name',
+    'tagline',
+    'location',
+    'description',
+    'contact',
+    'welcome',
+    'logo',
+    'backgroundImage',
+    'services',
+    'funding',
+  ]
   const patch = {}
   for (const k of allowed) if (k in req.body) patch[k] = req.body[k]
   res.json({ config: updateConfig(patch) })

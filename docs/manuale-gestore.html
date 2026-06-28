@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Manuale Gestore — Agriturismo Zàgara</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --lava: #221b16;
+        --lava-soft: #4a3b30;
+        --paper: #faf3e6;
+        --paper-2: #f2e6cf;
+        --maiolica: #145c66;
+        --maiolica-deep: #0d444c;
+        --arancia: #d8521f;
+        --ginestra: #e6b33e;
+        --oliva: #6f7c45;
+        --line: rgba(34, 27, 22, 0.16);
+        --display: 'Bricolage Grotesque', system-ui, sans-serif;
+        --body: 'Inter', system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      @page { size: A4; margin: 18mm 16mm; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: var(--body);
+        color: var(--lava);
+        font-size: 10.5pt;
+        line-height: 1.55;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Fascia di maioliche (firma del brand) */
+      .tile-band {
+        height: 9px;
+        background-image:
+          radial-gradient(circle at 50% 50%, var(--ginestra) 0 22%, transparent 23%),
+          radial-gradient(circle at 0% 50%, var(--arancia) 0 22%, transparent 23%),
+          radial-gradient(circle at 100% 50%, var(--arancia) 0 22%, transparent 23%),
+          linear-gradient(45deg, var(--maiolica-deep) 25%, transparent 0 75%, var(--maiolica-deep) 0),
+          linear-gradient(var(--maiolica), var(--maiolica));
+        background-size: 18px 18px;
+        background-position: center;
+        border-radius: 3px;
+      }
+
+      h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; }
+      h2 {
+        font-size: 17pt;
+        color: var(--maiolica-deep);
+        margin: 26px 0 8px;
+        padding-top: 6px;
+        border-top: 2px solid var(--line);
+      }
+      h3 { font-size: 12pt; margin: 16px 0 4px; }
+      p { margin: 6px 0; }
+      ul { margin: 6px 0; padding-left: 18px; }
+      li { margin: 3px 0; }
+      strong { color: var(--lava); }
+      .muted { color: var(--lava-soft); }
+
+      .pill {
+        display: inline-block;
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: 8.5pt;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--maiolica-deep);
+        background: rgba(20, 92, 102, 0.1);
+        border: 1px solid rgba(20, 92, 102, 0.25);
+        border-radius: 999px;
+        padding: 3px 10px;
+      }
+
+      /* Cover */
+      .cover {
+        height: 247mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        page-break-after: always;
+      }
+      .cover .eyebrow {
+        font-family: var(--display);
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--arancia);
+        font-size: 10pt;
+        margin-bottom: 14px;
+      }
+      .cover h1 {
+        font-size: 40pt;
+        line-height: 0.98;
+        margin: 0 0 12px;
+        font-weight: 800;
+      }
+      .cover .sub {
+        font-family: var(--display);
+        font-style: italic;
+        font-size: 15pt;
+        color: var(--maiolica-deep);
+        margin-bottom: 28px;
+      }
+      .cover .meta { color: var(--lava-soft); font-size: 10pt; margin-top: 40px; }
+      .cover .dot { color: var(--ginestra); }
+
+      .lead {
+        font-size: 11.5pt;
+        color: var(--lava-soft);
+        border-left: 3px solid var(--ginestra);
+        padding-left: 14px;
+        margin: 14px 0;
+      }
+
+      .card {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin: 10px 0;
+      }
+      .card.accent { border-left: 4px solid var(--maiolica); }
+      .card.warn { background: rgba(230, 179, 62, 0.14); border-color: rgba(230, 179, 62, 0.5); }
+
+      .steps { counter-reset: step; list-style: none; padding-left: 0; }
+      .steps li {
+        counter-increment: step;
+        position: relative;
+        padding-left: 34px;
+        margin: 10px 0;
+      }
+      .steps li::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: -1px;
+        width: 22px;
+        height: 22px;
+        background: var(--maiolica);
+        color: var(--paper);
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: 10pt;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      code, .mono {
+        font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+        background: var(--paper-2);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 9.5pt;
+      }
+      .code-box {
+        font-family: var(--display);
+        font-weight: 800;
+        font-size: 16pt;
+        letter-spacing: 0.22em;
+        color: var(--maiolica-deep);
+        background: var(--paper);
+        border: 2px dashed var(--maiolica);
+        border-radius: 8px;
+        padding: 8px 16px;
+        display: inline-block;
+      }
+
+      .faq dt { font-family: var(--display); font-weight: 700; margin-top: 12px; }
+      .faq dd { margin: 2px 0 0; color: var(--lava-soft); }
+
+      footer {
+        margin-top: 30px;
+        padding-top: 10px;
+        border-top: 1px solid var(--line);
+        font-size: 8.5pt;
+        color: var(--lava-soft);
+      }
+      .section { page-break-inside: avoid; }
+    </style>
+  </head>
+  <body>
+    <!-- COVER -->
+    <section class="cover">
+      <div class="tile-band" style="margin-bottom: 36px;"></div>
+      <div class="eyebrow">Manuale d'uso · Area gestore</div>
+      <h1>Assistente virtuale<br />Agriturismo Zàgara</h1>
+      <div class="sub">Guida pratica per gestire la chat e le informazioni per gli ospiti</div>
+      <p class="muted" style="max-width: 60%;">
+        Questo manuale spiega cosa fa l'assistente, come configurarlo e come tenerlo
+        aggiornato. Non serve essere esperti di informatica: bastano pochi minuti.
+      </p>
+      <div class="meta">
+        <span class="dot">●</span> Agriturismo Zàgara — pendici dell'Etna, Catania<br />
+        Versione 1.0
+      </div>
+      <div class="tile-band" style="margin-top: 36px;"></div>
+    </section>
+
+    <!-- 1. COS'È -->
+    <section class="section">
+      <h2>1. Che cos'è</h2>
+      <p>
+        L'assistente è un <strong>chatbot</strong> sul sito della struttura: risponde agli
+        ospiti <strong>24 ore su 24</strong> sulle informazioni che <em>tu</em> gli fornisci —
+        servizi, orari, camere, e consigli su cosa vedere in zona (Etna, Catania, mare).
+      </p>
+      <p class="lead">
+        L'assistente risponde <strong>solo</strong> in base ai documenti che carichi tu. Se
+        un'informazione non c'è, lo dice con gentilezza e invita a contattare la struttura —
+        non si inventa nulla.
+      </p>
+
+      <h3>Le due parti del sistema</h3>
+      <div class="card accent">
+        <strong>Pagina ospiti</strong> — quello che vedono i tuoi clienti: le informazioni
+        sulla struttura e la chat con l'assistente.
+      </div>
+      <div class="card accent">
+        <strong>Area gestore</strong> (questa guida) — il tuo pannello riservato: cambi il
+        nome e i dati della struttura, gestisci le informazioni e il codice di accesso.
+      </div>
+    </section>
+
+    <!-- 2. ACCESSO AREA GESTORE -->
+    <section class="section">
+      <h2>2. Entrare nell'area gestore</h2>
+      <ol class="steps">
+        <li>Apri l'indirizzo del sito che ti è stato fornito e aggiungi <code>/admin</code> in fondo (es. <span class="mono">https://…/admin</span>).</li>
+        <li>In alto, il pulsante <strong>“Area gestore”</strong> porta alla stessa pagina.</li>
+        <li>Inserisci la <strong>password</strong> e premi <strong>Entra</strong>.</li>
+      </ol>
+      <div class="card warn">
+        <strong>Password area gestore:</strong> <code>reportaid123!</code><br />
+        <span class="muted">Tienila riservata. Con il pulsante <strong>“Esci”</strong> in alto a destra chiudi la sessione.</span>
+      </div>
+    </section>
+
+    <!-- 3. IDENTITÀ -->
+    <section class="section">
+      <h2>3. Dati della struttura</h2>
+      <p>Nel riquadro <strong>“Identità della struttura”</strong> imposti ciò che appare agli ospiti e che dà il “tono” all'assistente:</p>
+      <ul>
+        <li><strong>Nome struttura</strong> e <strong>Slogan</strong> — il titolo e il motto in cima alla pagina ospiti.</li>
+        <li><strong>Località</strong> — dove vi trovate.</li>
+        <li><strong>Descrizione</strong> — una presentazione breve della struttura.</li>
+        <li><strong>Contatti</strong> — telefono/email che l'assistente suggerisce quando non sa rispondere.</li>
+        <li><strong>Messaggio di benvenuto</strong> — la prima frase che l'ospite legge nella chat.</li>
+      </ul>
+      <p>Dopo le modifiche premi <strong>“Salva modifiche”</strong>: appare la conferma <strong>✓ Salvato</strong>.</p>
+    </section>
+
+    <!-- 4. CODICE ACCESSO -->
+    <section class="section">
+      <h2>4. Codice di accesso degli ospiti</h2>
+      <p>
+        Per evitare che usino la chat persone a caso, gli ospiti devono inserire un
+        <strong>codice di accesso</strong> di 6 caratteri. Lo trovi nel riquadro
+        <strong>“Codice di accesso ospiti”</strong>:
+      </p>
+      <p style="text-align:center; margin: 14px 0;"><span class="code-box">K7M2PQ</span> <span class="muted">(esempio)</span></p>
+      <ul>
+        <li><strong>Condividilo</strong> con gli ospiti: al check-in, su un cartoncino in camera o nel messaggio di benvenuto.</li>
+        <li><strong>“Rigenera codice”</strong> crea un codice nuovo: quello vecchio <strong>smette subito di funzionare</strong>. Utile a fine soggiorno o a inizio stagione per revocare i vecchi accessi.</li>
+      </ul>
+      <div class="card">
+        <span class="muted">Quando rigeneri, gli ospiti che avevano il vecchio codice vedranno di nuovo la richiesta di inserirlo: basta dare loro quello nuovo.</span>
+      </div>
+    </section>
+
+    <!-- 5. BASE DI CONOSCENZA -->
+    <section class="section">
+      <h2>5. Le informazioni dell'assistente (base di conoscenza)</h2>
+      <p>
+        È il cuore del sistema: l'insieme dei <strong>documenti</strong> da cui l'assistente
+        pesca le risposte. Ogni documento è un testo (servizi, regolamenti, consigli…).
+      </p>
+
+      <h3>Aggiungere un documento</h3>
+      <ol class="steps">
+        <li><strong>Carica un file</strong> con il pulsante “Carica file .md” <em>oppure</em> incolla il testo nel riquadro “Contenuto”.</li>
+        <li>Dai un <strong>Titolo</strong> chiaro (es. “Regolamento piscina”, “Orari colazione”).</li>
+        <li>Premi <strong>“Aggiungi documento”</strong>: viene subito reso ricercabile dall'assistente.</li>
+      </ol>
+
+      <h3>Scaricare e rimuovere</h3>
+      <ul>
+        <li><strong>Scarica</strong> — riscarica un documento già caricato (utile per modificarlo e ricaricarlo).</li>
+        <li><strong>Elimina</strong> — rimuove il documento; l'assistente smette di usarlo.</li>
+      </ul>
+
+      <h3>Consigli per scrivere buoni documenti</h3>
+      <ul>
+        <li>Un argomento per documento, con titoli e <strong>elenchi puntati</strong>: l'assistente li legge meglio.</li>
+        <li>Sii <strong>concreto</strong>: orari, prezzi, regole, distanze. Evita frasi vaghe.</li>
+        <li>Aggiorna i documenti quando cambia qualcosa (orari stagionali, nuovi servizi, eventi).</li>
+      </ul>
+    </section>
+
+    <!-- 6. COME RISPONDE -->
+    <section class="section">
+      <h2>6. Come si comporta l'assistente</h2>
+      <ul>
+        <li>Risponde in tono cordiale, da padrone di casa, nella lingua dell'ospite.</li>
+        <li>Usa <strong>solo</strong> le informazioni dei tuoi documenti e indica le fonti usate.</li>
+        <li>Se non trova la risposta, lo dice e rimanda ai contatti della struttura.</li>
+      </ul>
+      <p class="muted">Regola d'oro: se l'assistente “non sa” qualcosa, quasi sempre la soluzione è <strong>aggiungere un documento</strong> con quell'informazione.</p>
+    </section>
+
+    <!-- 7. FAQ -->
+    <section class="section">
+      <h2>7. Domande frequenti</h2>
+      <dl class="faq">
+        <dt>L'assistente dice che non trova un'informazione.</dt>
+        <dd>Aggiungi (o aggiorna) il documento che la contiene nella base di conoscenza.</dd>
+
+        <dt>Un ospite dice che il codice non funziona.</dt>
+        <dd>Probabilmente è stato rigenerato: dagli il codice attuale che vedi nell'area gestore.</dd>
+
+        <dt>Ho cambiato i dati ma non si aggiornano.</dt>
+        <dd>Assicurati di aver premuto “Salva modifiche”. Poi ricarica la pagina ospiti.</dd>
+
+        <dt>Le informazioni sono al sicuro?</dt>
+        <dd>Documenti e impostazioni restano sul servizio. L'area gestore è protetta da password e la chat dal codice di accesso.</dd>
+      </dl>
+
+      <div class="card warn" style="margin-top: 16px;">
+        <strong>Nota tecnica.</strong> Nella configurazione attuale i dati sono tenuti “in
+        memoria”: se il servizio viene riavviato, i documenti caricati possono azzerarsi e
+        tornano quelli iniziali. Tieni una copia dei tuoi documenti (usa “Scarica”). Per
+        renderli permanenti, chiedi a chi ti ha fornito il sistema di attivare il salvataggio
+        su disco.
+      </div>
+
+      <footer>
+        Assistente virtuale Agriturismo Zàgara · Manuale gestore v1.0 — Per assistenza
+        contatta chi ti ha fornito il sistema.
+      </footer>
+    </section>
+  </body>
+</html>

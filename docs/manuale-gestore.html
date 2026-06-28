@@ -175,6 +175,10 @@
         display: inline-block;
       }
 
+      table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 9.5pt; }
+      th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+      th { font-family: var(--display); color: var(--maiolica-deep); }
+
       .faq dt { font-family: var(--display); font-weight: 700; margin-top: 12px; }
       .faq dd { margin: 2px 0 0; color: var(--lava-soft); }
 
@@ -201,7 +205,7 @@
       </p>
       <div class="meta">
         <span class="dot">●</span> Agriturismo Zàgara — pendici dell'Etna, Catania<br />
-        Versione 1.0
+        Versione 1.1
       </div>
       <div class="tile-band" style="margin-top: 36px;"></div>
     </section>
@@ -256,12 +260,67 @@
         <li><strong>Contatti</strong> — telefono/email che l'assistente suggerisce quando non sa rispondere.</li>
         <li><strong>Messaggio di benvenuto</strong> — la prima frase che l'ospite legge nella chat.</li>
       </ul>
-      <p>Dopo le modifiche premi <strong>“Salva modifiche”</strong>: appare la conferma <strong>✓ Salvato</strong>.</p>
+      <p class="muted">Tutte le impostazioni di questa e delle prossime due sezioni si salvano insieme con l'unico pulsante <strong>“Salva modifiche”</strong> in fondo: appare la conferma <strong>✓ Salvato</strong>.</p>
     </section>
 
-    <!-- 4. CODICE ACCESSO -->
+    <!-- 4. ASPETTO -->
     <section class="section">
-      <h2>4. Codice di accesso degli ospiti</h2>
+      <h2>4. Aspetto della pagina</h2>
+      <p>Sotto i dati trovi i riquadri per personalizzare come appare la pagina agli ospiti.</p>
+
+      <h3>Logo</h3>
+      <p>
+        Puoi mostrare il <strong>nome della struttura come testo</strong> (predefinito) oppure
+        <strong>caricare un logo</strong>: premi “Carica logo” e scegli il file. “Rimuovi”
+        torna al nome testuale.
+      </p>
+
+      <h3>Immagine di sfondo</h3>
+      <p>
+        La grande immagine dietro le informazioni si cambia con “Cambia sfondo”, oppure si
+        riporta a quella iniziale (l'Etna) con “Ripristina default”.
+      </p>
+
+      <div class="card">
+        <strong>Caratteristiche consigliate delle immagini</strong>
+        <table>
+          <tr><th></th><th>Formato</th><th>Dimensioni</th><th>Peso</th></tr>
+          <tr>
+            <td><strong>Logo</strong></td>
+            <td>PNG o SVG, sfondo trasparente, orizzontale</td>
+            <td>~400×120 px (max 600×200)</td>
+            <td>&lt; 1 MB</td>
+          </tr>
+          <tr>
+            <td><strong>Sfondo</strong></td>
+            <td>JPG orizzontale, formato ~3:2</td>
+            <td>almeno 1600×1000 px (ideale 1920×1280)</td>
+            <td>&lt; 3 MB</td>
+          </tr>
+        </table>
+      </div>
+
+      <h3>Servizi in evidenza</h3>
+      <p>
+        Le etichette mostrate sotto la descrizione (es. “Noleggio e-bike”). Dall'elenco puoi
+        <strong>aggiungere</strong>, <strong>modificare</strong> o <strong>rimuovere</strong> le voci.
+      </p>
+    </section>
+
+    <!-- 5. FINANZIAMENTO -->
+    <section class="section">
+      <h2>5. Informazioni sul finanziamento</h2>
+      <p>
+        In fondo alla pagina ospiti puoi mostrare, in caratteri piccoli, le informazioni sul
+        finanziamento ricevuto (requisito tipico dei bandi). Scrivi il testo nell'apposito
+        riquadro <strong>“Informazioni sul finanziamento”</strong>; se lo lasci vuoto, il fondo
+        pagina non compare.
+      </p>
+    </section>
+
+    <!-- 6. CODICE ACCESSO -->
+    <section class="section">
+      <h2>6. Codice di accesso degli ospiti</h2>
       <p>
         Per evitare che usino la chat persone a caso, gli ospiti devono inserire un
         <strong>codice di accesso</strong> di 6 caratteri. Lo trovi nel riquadro
@@ -279,7 +338,7 @@
 
     <!-- 5. BASE DI CONOSCENZA -->
     <section class="section">
-      <h2>5. Le informazioni dell'assistente (base di conoscenza)</h2>
+      <h2>7. Le informazioni dell'assistente (base di conoscenza)</h2>
       <p>
         È il cuore del sistema: l'insieme dei <strong>documenti</strong> da cui l'assistente
         pesca le risposte. Ogni documento è un testo (servizi, regolamenti, consigli…).
@@ -308,7 +367,7 @@
 
     <!-- 6. COME RISPONDE -->
     <section class="section">
-      <h2>6. Come si comporta l'assistente</h2>
+      <h2>8. Come si comporta l'assistente</h2>
       <ul>
         <li>Risponde in tono cordiale, da padrone di casa, nella lingua dell'ospite.</li>
         <li>Usa <strong>solo</strong> le informazioni dei tuoi documenti e indica le fonti usate.</li>
@@ -319,7 +378,7 @@
 
     <!-- 7. FAQ -->
     <section class="section">
-      <h2>7. Domande frequenti</h2>
+      <h2>9. Domande frequenti</h2>
       <dl class="faq">
         <dt>L'assistente dice che non trova un'informazione.</dt>
         <dd>Aggiungi (o aggiorna) il documento che la contiene nella base di conoscenza.</dd>
@@ -343,7 +402,7 @@
       </div>
 
       <footer>
-        Assistente virtuale Agriturismo Zàgara · Manuale gestore v1.0 — Per assistenza
+        Assistente virtuale Agriturismo Zàgara · Manuale gestore v1.1 — Per assistenza
         contatta chi ti ha fornito il sistema.
       </footer>
     </section>

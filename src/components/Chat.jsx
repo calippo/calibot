@@ -17,8 +17,13 @@ export default function Chat({ config, hasKey }) {
   const [busy, setBusy] = useState(false)
   const scrollRef = useRef(null)
 
-  // Codice di accesso ospiti.
-  const [code, setCode] = useState(() => sessionStorage.getItem('zagara_access') || '')
+  // Codice di accesso ospiti: dal QR (?code=…) oppure da una visita precedente.
+  const [code, setCode] = useState(
+    () =>
+      new URLSearchParams(window.location.search).get('code')?.trim().toUpperCase() ||
+      sessionStorage.getItem('zagara_access') ||
+      '',
+  )
   const [unlocked, setUnlocked] = useState(false)
   const [codeInput, setCodeInput] = useState('')
   const [codeError, setCodeError] = useState('')
@@ -29,8 +34,10 @@ export default function Chat({ config, hasKey }) {
     api
       .checkAccess(code)
       .then(({ ok }) => {
-        if (ok) setUnlocked(true)
-        else {
+        if (ok) {
+          sessionStorage.setItem('zagara_access', code)
+          setUnlocked(true)
+        } else {
           sessionStorage.removeItem('zagara_access')
           setCode('')
         }

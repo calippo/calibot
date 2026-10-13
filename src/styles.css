@@ -5,12 +5,13 @@
   --paper: #faf3e6;
   --paper-2: #f2e6cf;
   --maiolica: #145c66;
-  --maiolica-deep: #0d444c;
+  /* scurito dal principale, così segue il colore scelto dal gestore */
+  --maiolica-deep: color-mix(in srgb, var(--maiolica) 72%, black);
   --arancia: #d8521f;
   --ginestra: #e6b33e;
   --oliva: #6f7c45;
   --line: rgba(34, 27, 22, 0.14);
-  --shadow: 0 18px 50px -24px rgba(13, 68, 76, 0.45);
+  --shadow: 0 18px 50px -24px color-mix(in srgb, var(--maiolica-deep) 45%, transparent);
 
   --display: 'Bricolage Grotesque', system-ui, sans-serif;
   --body: 'Inter', system-ui, sans-serif;
@@ -207,9 +208,9 @@ a {
   font-weight: 500;
   padding: 7px 14px;
   border-radius: 999px;
-  background: rgba(20, 92, 102, 0.1);
+  background: color-mix(in srgb, var(--maiolica) 10%, transparent);
   color: var(--maiolica-deep);
-  border: 1px solid rgba(20, 92, 102, 0.18);
+  border: 1px solid color-mix(in srgb, var(--maiolica) 18%, transparent);
 }
 
 .contact-card {
@@ -330,7 +331,7 @@ a {
 }
 
 .gate-error {
-  background: rgba(216, 82, 31, 0.22);
+  background: color-mix(in srgb, var(--arancia) 22%, transparent);
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 0.84rem;
@@ -424,9 +425,9 @@ a {
   font-weight: 500;
   padding: 3px 9px;
   border-radius: 999px;
-  background: rgba(20, 92, 102, 0.12);
+  background: color-mix(in srgb, var(--maiolica) 12%, transparent);
   color: var(--maiolica-deep);
-  border: 1px solid rgba(20, 92, 102, 0.2);
+  border: 1px solid color-mix(in srgb, var(--maiolica) 20%, transparent);
 }
 
 .typing {
@@ -668,7 +669,7 @@ a {
 .btn.danger {
   background: transparent;
   color: var(--arancia);
-  border: 1px solid rgba(216, 82, 31, 0.4);
+  border: 1px solid color-mix(in srgb, var(--arancia) 40%, transparent);
 }
 
 .saved-note {
@@ -736,7 +737,7 @@ a {
   padding: 16px;
   border: 1px dashed var(--maiolica);
   border-radius: 12px;
-  background: rgba(20, 92, 102, 0.05);
+  background: color-mix(in srgb, var(--maiolica) 5%, transparent);
   margin-bottom: 18px;
 }
 
@@ -754,8 +755,8 @@ a {
 }
 
 .banner.error {
-  background: rgba(216, 82, 31, 0.12);
-  border: 1px solid rgba(216, 82, 31, 0.35);
+  background: color-mix(in srgb, var(--arancia) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--arancia) 35%, transparent);
   color: #8c3414;
 }
 
@@ -899,4 +900,58 @@ a {
   * {
     animation: none !important;
   }
+}
+
+/* ----- Colori (admin) ----- */
+.color-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.color-control input[type='color'] {
+  width: 52px;
+  height: 40px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* ----- QR code (admin) ----- */
+.qr-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.qr-img {
+  width: 180px;
+  height: 180px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.qr-side {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.qr-url {
+  word-break: break-all;
+  font-size: 0.9rem;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
 }

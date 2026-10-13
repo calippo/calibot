@@ -2,7 +2,7 @@
 export const seedDocs = [
   {
     title: 'Servizi della struttura',
-    content: `# Servizi di Agriturismo Zàgara
+    content: `# Servizi di Zàgara
 
 ## Check-in e check-out
 - Check-in dalle 14:00 alle 20:00. Per arrivi tardivi avvisaci: lasciamo le chiavi in cassetta di sicurezza.
@@ -34,7 +34,7 @@ export const seedDocs = [
   },
   {
     title: 'Cosa fare nei dintorni',
-    content: `# Cosa vedere intorno all'Agriturismo
+    content: `# Cosa vedere nei dintorni
 
 ## Etna (15–40 minuti)
 - Rifugio Sapienza e funivia per le quote alte: partenza consigliata al mattino presto.

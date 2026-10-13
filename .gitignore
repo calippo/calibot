@@ -150,3 +150,6 @@ WhatsApp Image*.jpeg
 
 # config locale Claude Code
 .claude/
+
+# stato salvato in locale (config + documenti)
+data/

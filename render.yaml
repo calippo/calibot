@@ -4,7 +4,9 @@ services:
   - type: web
     name: calibot
     runtime: node
-    plan: free # il free tier va in sleep dopo inattività: lo stato in-memory si azzera
+    # starter (non free): niente sleep e supporto al disco persistente qui sotto.
+    # Sul free tier il filesystem si azzera a ogni riavvio e le modifiche del gestore si perdono.
+    plan: starter
     buildCommand: npm install && npm run build
     startCommand: npm start
     autoDeploy: true
@@ -15,3 +17,10 @@ services:
         sync: false # opzionale: password area gestore (default reportaid123!)
       - key: NODE_VERSION
         value: "20"
+      - key: DATA_DIR
+        value: /var/data
+    # Disco persistente: qui vive data/state.json (config, documenti, codice di accesso).
+    disk:
+      name: calibot-data
+      mountPath: /var/data
+      sizeGB: 1

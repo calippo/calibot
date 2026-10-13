@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import TopBar from '../components/TopBar.jsx'
-import { api } from '../api.js'
-
-// Password dell'area gestore (hardcoded, demo).
-const ADMIN_PASSWORD = 'reportaid123!'
+import QrPanel from '../components/QrPanel.jsx'
+import { api, adminSession } from '../api.js'
+import { applyTheme, DEFAULT_COLORS } from '../theme.js'
 
 export default function AdminPage() {
-  const [authed, setAuthed] = useState(() => sessionStorage.getItem('zagara_admin') === 'ok')
+  const [authed, setAuthed] = useState(() => Boolean(adminSession.get()))
   const [pw, setPw] = useState('')
   const [pwError, setPwError] = useState('')
   const [config, setConfig] = useState(null)
@@ -24,16 +23,22 @@ export default function AdminPage() {
   const fileRef = useRef(null)
 
   useEffect(() => {
+    if (!authed) return
     api.getConfig().then((d) => {
       setConfig(d.config)
       setHasKey(d.hasKey)
     })
     refreshDocs()
     api
-      .getAccessCode(ADMIN_PASSWORD)
+      .getAccessCode()
       .then((d) => setAccessCode(d.code))
-      .catch(() => {})
-  }, [])
+      .catch((err) => err.status === 401 && logout())
+  }, [authed])
+
+  // Anteprima live dei colori mentre il gestore li modifica.
+  useEffect(() => {
+    if (config) applyTheme(config)
+  }, [config?.primaryColor, config?.accentColor]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function regenerate() {
     if (
@@ -44,7 +49,7 @@ export default function AdminPage() {
       return
     setRegenerating(true)
     try {
-      const d = await api.regenerateAccessCode(ADMIN_PASSWORD)
+      const d = await api.regenerateAccessCode()
       setAccessCode(d.code)
     } catch (err) {
       setError(err.message)
@@ -169,19 +174,21 @@ export default function AdminPage() {
     setConfig({ ...config, services: (config.services || []).filter((_, j) => j !== i) })
   }
 
-  function login(e) {
+  // La password è verificata dal server (stessa di ADMIN_PASSWORD).
+  async function login(e) {
     e.preventDefault()
-    if (pw === ADMIN_PASSWORD) {
-      sessionStorage.setItem('zagara_admin', 'ok')
+    try {
+      await api.getAccessCode(pw)
+      adminSession.set(pw)
       setAuthed(true)
       setPwError('')
-    } else {
-      setPwError('Password errata. Riprova.')
+    } catch (err) {
+      setPwError(err.status === 401 ? 'Password errata. Riprova.' : err.message)
     }
   }
 
   function logout() {
-    sessionStorage.removeItem('zagara_admin')
+    adminSession.clear()
     setAuthed(false)
     setPw('')
   }
@@ -227,7 +234,7 @@ export default function AdminPage() {
         </div>
         <p className="lede">
           Configura la struttura e carica i documenti a cui l’assistente attinge per
-          rispondere agli ospiti. Tutto resta in memoria finché il server è acceso.
+          rispondere agli ospiti. Le modifiche restano salvate anche dopo un riavvio.
         </p>
 
         {!hasKey && (
@@ -358,6 +365,42 @@ export default function AdminPage() {
             </div>
           </div>
 
+          {/* Colori */}
+          <div className="panel">
+            <h2>Colori</h2>
+            <p className="hint">
+              Il colore principale si usa per pulsanti, chat ed etichette; l’accento per i
+              dettagli. L’anteprima è immediata: ricordati di salvare.
+            </p>
+            <div className="row">
+              {[
+                ['primaryColor', 'Colore principale'],
+                ['accentColor', 'Colore accento'],
+              ].map(([key, label]) => (
+                <div className="field" key={key}>
+                  <label>{label}</label>
+                  <div className="color-control">
+                    <input
+                      type="color"
+                      value={config[key] || DEFAULT_COLORS[key]}
+                      onChange={(e) => setConfig({ ...config, [key]: e.target.value })}
+                    />
+                    <code>{config[key] || DEFAULT_COLORS[key]}</code>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {(config.primaryColor || config.accentColor) && (
+              <button
+                type="button"
+                className="btn ghost small"
+                onClick={() => setConfig({ ...config, primaryColor: '', accentColor: '' })}
+              >
+                Ripristina colori originali
+              </button>
+            )}
+          </div>
+
           {/* Servizi in evidenza */}
           <div className="panel">
             <h2>Servizi in evidenza</h2>
@@ -425,6 +468,8 @@ export default function AdminPage() {
             </button>
           </div>
         </div>
+
+        <QrPanel accessCode={accessCode} name={config.name} />
 
         {/* --- Documenti --- */}
         <div className="panel">

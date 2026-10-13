@@ -13,6 +13,7 @@ import {
   removeDoc,
   getAccessCode,
   regenerateAccessCode,
+  loadState,
 } from './store.js'
 import { indexDoc, chat, hasKey } from './rag.js'
 import { seedDocs } from './seed.js'
@@ -38,7 +39,7 @@ app.get('/api/config', (_req, res) => {
   res.json({ config: getConfig(), hasKey })
 })
 
-app.put('/api/config', (req, res) => {
+app.put('/api/config', requireAdmin, (req, res) => {
   const allowed = [
     'name',
     'tagline',
@@ -50,6 +51,8 @@ app.put('/api/config', (req, res) => {
     'backgroundImage',
     'services',
     'funding',
+    'primaryColor',
+    'accentColor',
   ]
   const patch = {}
   for (const k of allowed) if (k in req.body) patch[k] = req.body[k]
@@ -67,7 +70,7 @@ app.get('/api/docs/:id', (req, res) => {
   res.json({ doc })
 })
 
-app.post('/api/docs', async (req, res) => {
+app.post('/api/docs', requireAdmin, async (req, res) => {
   const { title, content } = req.body || {}
   if (!content || !content.trim()) {
     return res.status(400).json({ error: 'Il contenuto del documento è vuoto' })
@@ -77,7 +80,7 @@ app.post('/api/docs', async (req, res) => {
   res.status(201).json({ doc: { id: doc.id, title: doc.title, createdAt: doc.createdAt }, chunks })
 })
 
-app.delete('/api/docs/:id', (req, res) => {
+app.delete('/api/docs/:id', requireAdmin, (req, res) => {
   const ok = removeDoc(Number(req.params.id))
   if (!ok) return res.status(404).json({ error: 'Documento non trovato' })
   res.json({ ok: true })
@@ -128,14 +131,16 @@ if (fs.existsSync(distPath)) {
   })
 }
 
-// Indicizza i documenti di esempio all'avvio.
+// Ripristina lo stato salvato; solo al primissimo avvio indicizza i documenti di esempio.
 async function bootstrap() {
-  for (const d of seedDocs) {
-    const doc = addDoc(d)
-    await indexDoc(doc)
+  if (!loadState()) {
+    for (const d of seedDocs) {
+      const doc = addDoc(d)
+      await indexDoc(doc)
+    }
   }
   app.listen(PORT, () => {
-    console.log(`\n  Agriturismo Zàgara — API su http://localhost:${PORT}`)
+    console.log(`\n  Zàgara — API su http://localhost:${PORT}`)
     console.log(`  OpenAI: ${hasKey ? 'attivo (RAG + chat LLM)' : 'NESSUNA KEY → fallback ricerca keyword'}`)
     console.log(`  Codice di accesso ospiti: ${getAccessCode()} (rigenerabile dall'area gestore)\n`)
   })

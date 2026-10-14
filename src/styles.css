@@ -1,16 +1,18 @@
 :root {
-  /* Palette: pietra lavica, zàgara (fiore d'agrume), maiolica di Caltagirone */
-  --lava: #221b16;
-  --lava-soft: #4a3b30;
+  /* Palette dal logo Aqarel: blu notte (onda) e oro (sole) */
+  --lava: #071a33;
+  --lava-soft: #33445c;
   --paper: #faf3e6;
   --paper-2: #f2e6cf;
-  --maiolica: #145c66;
+  --maiolica: #0a2244;
   /* scurito dal principale, così segue il colore scelto dal gestore */
   --maiolica-deep: color-mix(in srgb, var(--maiolica) 72%, black);
-  --arancia: #d8521f;
-  --ginestra: #e6b33e;
+  --arancia: #a8741a;
+  --ginestra: #f2bd4b;
+  /* errori e azioni distruttive: separato dall'accento, che ora è oro */
+  --rosso: #b3432a;
   --oliva: #6f7c45;
-  --line: rgba(34, 27, 22, 0.14);
+  --line: rgba(7, 26, 51, 0.14);
   --shadow: 0 18px 50px -24px color-mix(in srgb, var(--maiolica-deep) 45%, transparent);
 
   --display: 'Bricolage Grotesque', system-ui, sans-serif;
@@ -274,7 +276,7 @@ a {
 }
 
 .status-pill.off .led {
-  background: var(--arancia);
+  background: var(--rosso);
 }
 
 /* ----- Gate codice di accesso (lato chat) ----- */
@@ -331,7 +333,7 @@ a {
 }
 
 .gate-error {
-  background: color-mix(in srgb, var(--arancia) 22%, transparent);
+  background: color-mix(in srgb, var(--rosso) 22%, transparent);
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 0.84rem;
@@ -588,7 +590,7 @@ a {
   border-radius: 18px;
   padding: 28px;
   margin-bottom: 28px;
-  box-shadow: 0 12px 40px -28px rgba(34, 27, 22, 0.4);
+  box-shadow: 0 12px 40px -28px rgba(7, 26, 51, 0.4);
 }
 
 .panel h2 {
@@ -668,8 +670,8 @@ a {
 
 .btn.danger {
   background: transparent;
-  color: var(--arancia);
-  border: 1px solid color-mix(in srgb, var(--arancia) 40%, transparent);
+  color: var(--rosso);
+  border: 1px solid color-mix(in srgb, var(--rosso) 40%, transparent);
 }
 
 .saved-note {
@@ -749,14 +751,14 @@ a {
 }
 
 .banner.warn {
-  background: rgba(230, 179, 62, 0.18);
-  border: 1px solid rgba(230, 179, 62, 0.5);
+  background: rgba(242, 189, 75, 0.18);
+  border: 1px solid rgba(242, 189, 75, 0.5);
   color: #7a5a10;
 }
 
 .banner.error {
-  background: color-mix(in srgb, var(--arancia) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--arancia) 35%, transparent);
+  background: color-mix(in srgb, var(--rosso) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--rosso) 35%, transparent);
   color: #8c3414;
 }
 
@@ -879,7 +881,7 @@ a {
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 14px 18px;
-  box-shadow: 0 10px 30px -16px rgba(34, 27, 22, 0.5);
+  box-shadow: 0 10px 30px -16px rgba(7, 26, 51, 0.5);
   z-index: 5;
 }
 

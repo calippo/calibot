@@ -1,7 +1,7 @@
 // Applica i colori scelti dal gestore come variabili CSS (vuoto = palette di default).
 const VARS = { primaryColor: '--maiolica', accentColor: '--arancia' }
 
-export const DEFAULT_COLORS = { primaryColor: '#145c66', accentColor: '#d8521f' }
+export const DEFAULT_COLORS = { primaryColor: '#0a2244', accentColor: '#a8741a' }
 
 export function applyTheme(config) {
   const root = document.documentElement.style
